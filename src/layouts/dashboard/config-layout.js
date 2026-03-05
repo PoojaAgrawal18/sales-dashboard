@@ -8,4 +8,7 @@ export const HEADER = {
 
 export const NAV = {
   WIDTH: 257,
+  WIDTH_COLLAPSED: 72,
 };
+
+export const NAV_STORAGE_KEY = 'sales-dashboard-nav-collapsed';

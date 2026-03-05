@@ -1,73 +1,74 @@
 import { alpha } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
-
-// SETUP COLORS
+// Sales Dashboard design system – slate + sky blue accent
+// ----------------------------------------------------------------------
 
 export const grey = {
   0: '#FFFFFF',
-  100: '#F5F5F5',
-  200: '#F4F6F8',
-  300: '#DFE3E8',
-  400: '#C4CDD5',
-  500: '#919EAB',
-  600: '#637381',
-  700: '#454F5B',
-  800: '#212B36',
-  900: '#161C24',
+  50: '#f8fafc',
+  100: '#f1f5f9',
+  200: '#e2e8f0',
+  300: '#cbd5e1',
+  400: '#94a3b8',
+  500: '#64748b',
+  600: '#475569',
+  700: '#334155',
+  800: '#1e293b',
+  900: '#0f172a',
 };
 
 export const primary = {
-  lighter: '#D0ECFE',
-  light: '#73BAFB',
-  main: '#1877F2',
-  dark: '#0C44AE',
-  darker: '#042174',
+  lighter: '#e0f2fe',
+  light: '#38bdf8',
+  main: '#0ea5e9',
+  dark: '#0284c7',
+  darker: '#0369a1',
   contrastText: '#FFFFFF',
 };
 
 export const secondary = {
-  lighter: '#EFD6FF',
-  light: '#C684FF',
-  main: '#8E33FF',
-  dark: '#5119B7',
-  darker: '#27097A',
+  lighter: '#f3e8ff',
+  light: '#a78bfa',
+  main: '#8b5cf6',
+  dark: '#6d28d9',
+  darker: '#5b21b6',
   contrastText: '#FFFFFF',
 };
 
 export const info = {
-  lighter: '#CAFDF5',
-  light: '#61F3F3',
-  main: '#00B8D9',
-  dark: '#006C9C',
-  darker: '#003768',
+  lighter: '#e0f2fe',
+  light: '#38bdf8',
+  main: '#0ea5e9',
+  dark: '#0284c7',
+  darker: '#0369a1',
   contrastText: '#FFFFFF',
 };
 
 export const success = {
-  lighter: '#C8FAD6',
-  light: '#5BE49B',
-  main: '#00A76F',
-  dark: '#007867',
-  darker: '#004B50',
+  lighter: '#dcfce7',
+  light: '#22c55e',
+  main: '#16a34a',
+  dark: '#15803d',
+  darker: '#166534',
   contrastText: '#FFFFFF',
 };
 
 export const warning = {
-  lighter: '#FFF5CC',
-  light: '#FFD666',
-  main: '#FFAB00',
-  dark: '#B76E00',
-  darker: '#7A4100',
+  lighter: '#fef3c7',
+  light: '#f59e0b',
+  main: '#d97706',
+  dark: '#b45309',
+  darker: '#92400e',
   contrastText: grey[800],
 };
 
 export const error = {
-  lighter: '#FFE9D5',
-  light: '#FFAC82',
-  main: '#FF5630',
-  dark: '#B71D18',
-  darker: '#7A0916',
+  lighter: '#fee2e2',
+  light: '#f87171',
+  main: '#ef4444',
+  dark: '#dc2626',
+  darker: '#b91c1c',
   contrastText: '#FFFFFF',
 };
 
@@ -78,10 +79,10 @@ export const common = {
 
 export const action = {
   hover: alpha(grey[500], 0.08),
-  selected: alpha(grey[500], 0.16),
+  selected: alpha(primary.main, 0.12),
   disabled: alpha(grey[500], 0.8),
   disabledBackground: alpha(grey[500], 0.24),
-  focus: alpha(grey[500], 0.24),
+  focus: alpha(primary.main, 0.24),
   hoverOpacity: 0.08,
   disabledOpacity: 0.48,
 };
@@ -95,11 +96,9 @@ const base = {
   error,
   grey,
   common,
-  divider: alpha(grey[500], 0.2),
+  divider: alpha(grey[500], 0.12),
   action,
 };
-
-// ----------------------------------------------------------------------
 
 export function palette() {
   return {
@@ -112,12 +111,12 @@ export function palette() {
     },
     background: {
       paper: '#FFFFFF',
-      default: grey[100],
-      neutral: grey[200],
+      default: grey[50],
+      neutral: grey[100],
     },
     action: {
       ...base.action,
-      active: grey[600],
+      active: grey[700],
     },
   };
 }

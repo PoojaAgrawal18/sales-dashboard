@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
-// eslint-disable-next-line perfectionist/sort-imports
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 
@@ -32,10 +30,10 @@ const dashboardTitleVariants = {
 
 const MotionTypography = motion(Typography);
 
-export default function Header({ onOpenNav }) {
+export default function Header({ onOpenNav, navWidth: navWidthProp }) {
   const theme = useTheme();
-
   const lgUp = useResponsive('up', 'lg');
+  const navWidth = navWidthProp ?? NAV.WIDTH;
 
   // const firstName = userDetails?.name?.split(' ')[0];
 
@@ -45,53 +43,51 @@ export default function Header({ onOpenNav }) {
       sx={{
         position: 'absolute',
         top: 16,
-        borderRadius: '8px',
-        ml: 5,
-        height: '64px',
+        borderRadius: 2,
+        ml: 2,
+        height: 56,
         zIndex: theme.zIndex.appBar + 1,
-        backgroundColor: 'white',
-        borderBottom: '1px solid #f0f0f0',
+        backgroundColor: 'rgba(15, 23, 42, 0.85)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+        backdropFilter: 'blur(12px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        left: lgUp ? `${NAV.WIDTH}px` : 0,
-        right: 39,
-        py: { xs: 0.5, sm: 1, md: 2 },
-        px: { xs: 1, sm: 2, md: 3 },
+        left: lgUp ? `${navWidth}px` : 8,
+        right: 16,
+        py: 0,
+        px: { xs: 2, md: 3 },
       }}
     >
-      <Toolbar
-        sx={{
-          height: 1,
-          px: { lg: 5 },
-        }}
-      >
-        <Box sx={{ flexGrow: 0 }} />
-
-        <Box sx={{ width: '100%' }}>
-          <Stack mt={0} ml={-6}>
-
-            <MotionTypography
-              initial="hidden"
-              animate="visible"
-              variants={dashboardTitleVariants}
-              sx={{ textAlign: 'center', fontSize: '18px', fontWeight: 500, color: '#000000',ml:1 }}
-            >
-              <b>RCM 360</b> - Revenue Cycle Metrics & Monitoring Platform
-
-            </MotionTypography>
-          </Stack>
-
-
+      <Toolbar disableGutters sx={{ height: 1, flex: 1, px: { lg: 2 } }}>
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <MotionTypography
+            initial="hidden"
+            animate="visible"
+            variants={dashboardTitleVariants}
+            sx={{
+              fontSize: 15,
+              fontWeight: 600,
+              color: '#e2e8f0',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            <Box component="span" sx={{ color: '#94a3b8', fontWeight: 500 }}>
+              Sales Dashboard
+            </Box>
+            <Box component="span" sx={{ mx: 0.5, color: 'rgba(255,255,255,0.2)' }}>·</Box>
+            <Box component="span">Pipeline, revenue & performance</Box>
+          </MotionTypography>
         </Box>
       </Toolbar>
-    <NotificationPanel />
-
+      <NotificationPanel />
     </Box>
   );
 }
 
 Header.propTypes = {
   onOpenNav: PropTypes.func,
+  navWidth: PropTypes.number,
 };
 

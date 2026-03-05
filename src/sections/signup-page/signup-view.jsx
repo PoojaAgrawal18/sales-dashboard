@@ -5,21 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, useFormik, FormikProvider } from 'formik';
 
 import { LoadingButton } from '@mui/lab';
-import { useTheme } from '@mui/material/styles';
 import {
   Box,
-  Card,
+  Grid,
   Stack,
   Select,
   Divider,
   MenuItem,
   TextField,
-  Container,
   Typography,
   IconButton,
-  InputLabel,
   FormControl,
-  useMediaQuery,
   InputAdornment,
 } from '@mui/material';
 
@@ -31,11 +27,8 @@ import { AUTH_API_ROUTES } from 'src/services/auth/constants';
 import Iconify from 'src/components/iconify';
 
 export default function SignUpView() {
-  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((reducers) => reducers.authReducer);
@@ -61,8 +54,7 @@ export default function SignUpView() {
       state: '',
     },
     validationSchema: SignupSchema,
-    onSubmit: (values, action) => {
-      // Handle signup submission
+    onSubmit: (values) => {
       dispatch({
         type: AUTH_ACTIONS.SIGNUP,
         payload: {
@@ -82,280 +74,289 @@ export default function SignUpView() {
     router.push('/login');
   };
 
+  const inputSx = {
+    '& .MuiOutlinedInput-root': {
+      bgcolor: 'background.paper',
+      borderRadius: 2,
+      '& fieldset': { borderColor: 'divider' },
+      '&:hover fieldset': { borderColor: 'primary.main' },
+      '&.Mui-focused fieldset': { borderColor: 'primary.main', borderWidth: 2 },
+    },
+  };
+
   return (
-    <Box
-      sx={{
-        backgroundImage: `linear-gradient(to bottom, rgba(26, 32, 39, 0.5), rgba(26, 32, 39, 0.7)), url('../../../assets/background/Background.png')`,
-        width: '100%',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'relative',
-        backgroundColor: '#011627', // Dark blue background as fallback
-        overflow: 'auto', // Handle overflow for small screens
-      }}
-    >
-      {/* Header with Logo and Language Selector */}
+    <Box sx={{ minHeight: '100vh', display: 'flex', fontFamily: 'inherit' }}>
+      {/* Left Panel - Hero (matches nav/dashboard) */}
       <Box
         sx={{
-          display: 'flex',
+          flex: { xs: 0, lg: 1 },
+          display: { xs: 'none', lg: 'flex' },
+          flexDirection: 'column',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          p: { xs: 2, sm: 3, md: 4 },
-          width: '100%',
+          p: 8,
+          background: 'linear-gradient(180deg, #0f172a 0%, #0c1222 100%)',
+          borderRight: '1px solid rgba(148, 163, 184, 0.08)',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Capline Logo */}
-        <Box  onClick={() => router.push('/')}>
-          <img
-            src="../../../assets/logo/capline-logo.png"
-            alt="capline logo"
-              style={{
-              width: isMobile ? '179px' : '179px',
-              marginLeft: isMobile ? '0px' : '-5px',
-              marginTop: '-16px',height:'45px',position:'relative'
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box
+            sx={{
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 6,
+              boxShadow: '0 8px 32px rgba(56, 189, 248, 0.35)',
             }}
-          />
+          >
+            <Typography sx={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>S</Typography>
+          </Box>
+
+          <Typography
+            sx={{
+              fontSize: 56,
+              fontWeight: 800,
+              color: '#f1f5f9',
+              lineHeight: 1.1,
+              mb: 3,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            Win more
+            <br />
+            deals, faster
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 18,
+              color: 'rgba(148, 163, 184, 0.95)',
+              maxWidth: 420,
+              lineHeight: 1.6,
+            }}
+          >
+            Revenue intelligence that transforms your pipeline into predictable growth
+          </Typography>
+        </Box>
+
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Stack spacing={2}>
+            {[
+              { value: '3.2x', label: 'Average deal velocity increase' },
+              { value: '94%', label: 'Forecast accuracy' },
+              { value: '10k+', label: 'Teams powered' },
+            ].map((stat, i) => (
+              <Box
+                key={stat.label}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: 2,
+                  py: 2,
+                  borderTop: i === 0 ? 'none' : '1px solid rgba(148, 163, 184, 0.12)',
+                }}
+              >
+                <Typography sx={{ fontSize: 28, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+                  {stat.value}
+                </Typography>
+                <Typography sx={{ fontSize: 15, color: 'rgba(226, 232, 240, 0.9)', fontWeight: 500 }}>
+                  {stat.label}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
         </Box>
       </Box>
 
-      {/* Main Content - Signup Card */}
-      <Container
-        maxWidth="sm"
+      {/* Right Panel - Form */}
+      <Box
         sx={{
           flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          py: { xs: 2, sm: 3, md: 4 },
-          mt: { xs: -2, sm: -4, md: -6 },
-          px: { xs: 2, sm: 3 },
+          p: { xs: 3, sm: 6, md: 8 },
+          bgcolor: 'background.default',
         }}
       >
-        <Card
-          sx={{
-            width: '100%',
-            borderRadius: 1,
-            p: { xs: 2, sm: 3 },
-            boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            maxWidth: { xs: '100%', sm: '450px', md: '500px' },
-            minHeight: { xs: '600px', sm: '730px' },
-            mx: 'auto',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Capline Icon */}
-          <Box  onClick={() => router.push('/')}
-            sx={{
-              mb: 2,
-              mt: { xs: 4, sm: 4 },
-            }}
-          >
-            <img
-              src="../../../assets/logo/cap.png"
-              alt="capline logo"
-              style={{ width: isMobile ? '59px' : '59px' }}
-            />
-          </Box>
-
-          {/* Create Account Text */}
-          <Typography
-            sx={{
-              fontWeight: 700,
-              color: 'black',
-              textAlign: 'center',
-              mb: 2,
-              fontSize: '18px',
-            }}
-          >
-            Create an account
-          </Typography>
-
-          {/* Signup Form */}
-          <FormikProvider value={formik}>
-            <Form
-              autoComplete="off"
-              noValidate
-              onSubmit={handleSubmit}
-              style={{
-                width: '100%',
-                maxWidth: '380px',
-                padding: '0 16px',
+        <Box sx={{ width: '100%', maxWidth: 480 }}>
+          <Box sx={{ mb: 5 }}>
+            <Typography
+              sx={{
+                fontSize: { xs: 28, sm: 34 },
+                fontWeight: 800,
+                color: 'text.primary',
+                mb: 1.5,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
               }}
             >
-              <Stack spacing={2}>
-                {/* Full Name Field */}
-                <TextField
-                  fullWidth
-                  name="fullName"
-                  label="Full Name"
-                  size="small"
-                  {...getFieldProps('fullName')}
-                  error={Boolean(touched.fullName && errors.fullName)}
-                  helperText={touched.fullName && errors.fullName}
-                />
+              Get started
+            </Typography>
+            <Typography sx={{ fontSize: 15, color: 'text.secondary', lineHeight: 1.6 }}>
+              Create your workspace and start closing deals
+            </Typography>
+          </Box>
 
-                {/* Username Field */}
-                <TextField
-                  fullWidth
-                  name="username"
-                  label="Username"
-                  size="small"
-                  {...getFieldProps('username')}
-                  error={Boolean(touched.username && errors.username)}
-                  helperText={touched.username && errors.username}
-                />
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Stack spacing={2.5}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      name="fullName"
+                      placeholder="Full name"
+                      {...getFieldProps('fullName')}
+                      error={Boolean(touched.fullName && errors.fullName)}
+                      helperText={touched.fullName && errors.fullName}
+                      sx={inputSx}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      name="username"
+                      placeholder="Workspace name"
+                      {...getFieldProps('username')}
+                      error={Boolean(touched.username && errors.username)}
+                      helperText={touched.username && errors.username}
+                      sx={inputSx}
+                    />
+                  </Grid>
+                </Grid>
 
-                {/* Email Field */}
                 <TextField
                   fullWidth
                   name="email"
-                  label="Email"
-                  size="small"
+                  placeholder="Work email"
                   {...getFieldProps('email')}
                   error={Boolean(touched.email && errors.email)}
                   helperText={touched.email && errors.email}
+                  sx={inputSx}
                 />
 
-                {/* Phone Number Field */}
-                <TextField
-                  fullWidth
-                  name="phoneNumber"
-                  label="Phone Number"
-                  size="small"
-                  {...getFieldProps('phoneNumber')}
-                  error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                  helperText={touched.phoneNumber && errors.phoneNumber}
-                />
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      name="phoneNumber"
+                      placeholder="Phone number"
+                      {...getFieldProps('phoneNumber')}
+                      error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                      helperText={touched.phoneNumber && errors.phoneNumber}
+                      sx={inputSx}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth error={Boolean(touched.state && errors.state)} sx={inputSx}>
+                      <Select displayEmpty {...getFieldProps('state')}>
+                        <MenuItem value="" disabled><em>State</em></MenuItem>
+                        <MenuItem value="AL">Alabama</MenuItem>
+                        <MenuItem value="AK">Alaska</MenuItem>
+                        <MenuItem value="AZ">Arizona</MenuItem>
+                      </Select>
+                      {touched.state && errors.state && (
+                        <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.75 }}>
+                          {errors.state}
+                        </Typography>
+                      )}
+                    </FormControl>
+                  </Grid>
+                </Grid>
 
-                {/* Password Field */}
                 <TextField
                   fullWidth
                   name="password"
-                  label="Password"
-                  size="small"
+                  placeholder="Password (min. 6 characters)"
                   type={showPassword ? 'text' : 'password'}
                   {...getFieldProps('password')}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          size="small"
-                        >
-                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: 'text.secondary' }}>
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} sx={{ width: 22, height: 22 }} />
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
                   error={Boolean(touched.password && errors.password)}
                   helperText={touched.password && errors.password}
+                  sx={inputSx}
                 />
 
-                {/* State Field */}
-                <FormControl fullWidth size="small" error={Boolean(touched.state && errors.state)}>
-                  <InputLabel id="state-select-label">State</InputLabel>
-                  <Select
-                    labelId="state-select-label"
-                    id="state-select"
-                    label="State"
-                    {...getFieldProps('state')}
-                  >
-                    <MenuItem value="AL">Alabama</MenuItem>
-                    <MenuItem value="AK">Alaska</MenuItem>
-                    <MenuItem value="AZ">Arizona</MenuItem>
-                    {/* Add other states as needed */}
-                  </Select>
-                  {touched.state && errors.state && (
-                    <Typography variant="caption" color="error">
-                      {errors.state}
-                    </Typography>
-                  )}
-                </FormControl>
-
-                {/* Signup Button */}
                 <LoadingButton
                   fullWidth
-                  size="medium"
+                  size="large"
                   type="submit"
                   variant="contained"
                   loading={loading}
                   sx={{
-                    backgroundColor: '#2C4E6C',
-                    mt: 3,
-                    mb: 2,
-                    '&:hover': {
-                      backgroundColor: '#1E3A52',
-                    },
-                    height: '42px',
+                    mt: 0.5,
+                    height: 48,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontSize: 15,
+                    fontWeight: 600,
+                    boxShadow: (t) => t.customShadows?.primary || '0 4px 14px rgba(14, 165, 233, 0.35)',
                   }}
                 >
-                  Signup
+                  Create workspace
                 </LoadingButton>
               </Stack>
             </Form>
           </FormikProvider>
 
-          {/* Divider with "Or" text */}
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: '380px',
-              display: 'flex',
-              alignItems: 'center',
-              my: 2,
-              px: 2,
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} />
-            <Typography variant="caption" sx={{ px: 2, color: 'text.secondary' }}>
-              Or
-            </Typography>
-            <Divider sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: 'flex', alignItems: 'center', my: 3, gap: 2 }}>
+            <Divider sx={{ flex: 1 }} />
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>OR</Typography>
+            <Divider sx={{ flex: 1 }} />
           </Box>
 
-          {/* Google Signup Button */}
           <LoadingButton
             fullWidth
-            size="medium"
+            size="large"
             variant="outlined"
             onClick={handleGoogleSignup}
-            startIcon={<Iconify sx={{ width: 28, height: 28 }} icon="flat-color-icons:google" />}
+            startIcon={<Iconify icon="flat-color-icons:google" sx={{ width: 22, height: 22 }} />}
             sx={{
-              color: 'text.primary',
+              height: 48,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: 15,
+              fontWeight: 600,
               borderColor: 'divider',
-              maxWidth: '350px',
-              height: '42px',
+              '&:hover': { borderColor: 'grey.400', bgcolor: 'action.hover' },
             }}
-          />
+          >
+            Continue with Google
+          </LoadingButton>
 
-          {/* Already have an account */}
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant="body2" sx={{ display: 'inline-block' }}>
-              Already have an account?
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Typography component="span" sx={{ color: 'text.secondary', fontSize: 15 }}>
+              Already have an account?{' '}
             </Typography>
             <Typography
-              variant="body2"
               component="span"
               onClick={handleLogin}
               sx={{
                 color: 'primary.main',
-                ml: 1,
-                fontWeight: 'bold',
+                fontSize: 15,
+                fontWeight: 600,
                 cursor: 'pointer',
+                '&:hover': { textDecoration: 'underline' },
               }}
             >
-              Login
+              Log in
             </Typography>
           </Box>
-        </Card>
-      </Container>
+        </Box>
+      </Box>
     </Box>
   );
 }

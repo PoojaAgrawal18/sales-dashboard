@@ -5,69 +5,81 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import Logo from 'src/components/logo';
-
 // ----------------------------------------------------------------------
 
 export default function NotFoundView() {
-  const renderHeader = (
+  return (
     <Box
-      component="header"
       sx={{
-        top: 0,
-        left: 0,
-        width: 1,
-        lineHeight: 0,
-        position: 'fixed',
-        p: (theme) => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) }),
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'background.default',
+        py: 8,
       }}
     >
-      <Logo />
-    </Box>
-  );
-
-  return (
-    <>
-      {renderHeader}
-
-      <Container>
-        <Box
-          sx={{
-            py: 12,
-            maxWidth: 480,
-            mx: 'auto',
-            display: 'flex',
-            minHeight: '100vh',
-            textAlign: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="h3" sx={{ mb: 3 }}>
-            Sorry, page not found!
-          </Typography>
-
-          <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
-          </Typography>
-
+      <Container maxWidth="sm">
+        <Box sx={{ textAlign: 'center' }}>
           <Box
-            component="img"
-            src="/assets/illustrations/illustration_404.svg"
             sx={{
+              width: 80,
+              height: 80,
+              borderRadius: 2,
               mx: 'auto',
-              height: 260,
-              my: { xs: 5, sm: 10 },
+              mb: 3,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
+              boxShadow: '0 8px 32px rgba(14, 165, 233, 0.35)',
             }}
-          />
+          >
+            <Typography sx={{ fontSize: 36, fontWeight: 800, color: '#fff' }}>404</Typography>
+          </Box>
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
-            Go to Home
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', mb: 1.5, letterSpacing: '-0.02em' }}>
+            Page not found
+          </Typography>
+
+          <Typography sx={{ color: 'text.secondary', mb: 4, maxWidth: 360, mx: 'auto' }}>
+            Sorry, we couldn’t find the page you’re looking for. Check the URL or head back to the dashboard.
+          </Typography>
+
+          <Button
+            component={RouterLink}
+            href="/dashboard"
+            variant="contained"
+            size="large"
+            sx={{
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 600,
+              px: 3,
+              py: 1.5,
+              boxShadow: (t) => t.customShadows?.primary || '0 4px 14px rgba(14, 165, 233, 0.35)',
+            }}
+          >
+            Back to dashboard
           </Button>
+
+          <Typography
+            component={RouterLink}
+            href="/"
+            sx={{
+              display: 'inline-block',
+              mt: 2,
+              color: 'primary.main',
+              fontWeight: 600,
+              textDecoration: 'none',
+              fontSize: 14,
+              '&:hover': { textDecoration: 'underline' },
+            }}
+          >
+            Sign in
+          </Typography>
         </Box>
       </Container>
-    </>
+    </Box>
   );
 }

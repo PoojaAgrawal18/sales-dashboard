@@ -130,8 +130,14 @@ export default function NotificationPanel() {
                 ref={notificationButtonRef}
                 onClick={handleNotificationClick}
                 sx={{
+                    color: '#94a3b8',
                     '&:hover': {
-                        backgroundColor: 'rgba(107, 114, 128, 0.1)',
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        color: '#e2e8f0',
+                    },
+                    '& img': {
+                        filter: 'invert(1) brightness(0.9)',
+                        opacity: 0.9,
                     },
                 }}
             >

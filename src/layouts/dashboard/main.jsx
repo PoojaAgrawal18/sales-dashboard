@@ -8,10 +8,13 @@ import { NAV, HEADER } from './config-layout';
 
 // ----------------------------------------------------------------------
 
+const DASHBOARD_BG = '#0a0f2b'; // matches dashboard content area
+
 const SPACING = 8;
 
-export default function Main({ children, sx, ...other }) {
+export default function Main({ children, sx, navWidth: navWidthProp, ...other }) {
   const lgUp = useResponsive('up', 'lg');
+  const navWidth = navWidthProp ?? NAV.WIDTH;
 
   return (
     <Box
@@ -21,11 +24,12 @@ export default function Main({ children, sx, ...other }) {
         minHeight: 1,
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: DASHBOARD_BG,
         py: `${HEADER.H_MOBILE + SPACING}px`,
         ...(lgUp && {
           px: 2,
           py: `${HEADER.H_DESKTOP + SPACING}px`,
-          width: `calc(100% - ${NAV.WIDTH}px)`,
+          width: `calc(100% - ${navWidth}px)`,
         }),
         ...sx,
       }}
@@ -39,4 +43,5 @@ export default function Main({ children, sx, ...other }) {
 Main.propTypes = {
   children: PropTypes.node,
   sx: PropTypes.object,
+  navWidth: PropTypes.number,
 };

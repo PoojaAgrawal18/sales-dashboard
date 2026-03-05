@@ -28,6 +28,13 @@ export default defineConfig({
   },
   server: {
     port: 3030,
+    proxy: {
+      // Avoid CORS in dev: browser calls /api/* on same origin, Vite forwards to backend
+      '/api': {
+        target: 'http://localhost:7474',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     port: 3030,

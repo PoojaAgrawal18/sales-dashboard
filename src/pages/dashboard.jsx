@@ -9,7 +9,7 @@ export default function DashboardPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title>Sales Dashboard</title>
       </Helmet>
 
       <DashboardView />

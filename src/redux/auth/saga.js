@@ -14,24 +14,30 @@ const userService = new UserAPIService();
 
 export function* LOGIN({ payload }) {
   const response = yield doApiCall(authService.login, payload, AUTH_ACTIONS.SET_STATE);
-  
-  if (response.success) {
+
+  if (response.success && response.data) {
     const { data } = response;
+    // Support multiple backend shapes: tokens object, or top-level accessToken/token
+    const accessToken =
+      data.tokens?.accessToken ?? data.accessToken ?? data.token ?? null;
+    const refreshToken =
+      data.tokens?.refreshToken ?? data.refreshToken ?? data.token ?? null;
+
     yield put({
       type: AUTH_ACTIONS.SET_STATE,
       payload: {
         ...data,
+        tokens: data.tokens ?? { accessToken, refreshToken },
         isAuthenticated: true,
       },
     });
-    
-  
-    store.set('accessToken', data.tokens.accessToken);
-    store.set('refreshToken', data.tokens.refreshToken);
+
+    if (accessToken) store.set('accessToken', accessToken);
+    if (refreshToken) store.set('refreshToken', refreshToken);
     store.set('isAuthenticated', true);
 
     history.push('/dashboard');
-    
+
     toast.success('Login successful', {
       position: 'top-right',
       autoClose: 5000,

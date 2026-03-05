@@ -5,21 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, useFormik, FormikProvider } from 'formik';
 
 import { LoadingButton } from '@mui/lab';
-import { useTheme } from '@mui/material/styles';
 import {
   Box,
-  Card,
   Stack,
   Divider,
   TextField,
-  Container,
   Typography,
   IconButton,
-  useMediaQuery,
   InputAdornment,
 } from '@mui/material';
 
-import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { AUTH_ACTIONS } from 'src/redux/auth/actions';
 import { AUTH_API_ROUTES } from 'src/services/auth/constants';
@@ -27,12 +23,7 @@ import { AUTH_API_ROUTES } from 'src/services/auth/constants';
 import Iconify from 'src/components/iconify';
 
 export default function LoginPageView() {
-  const theme = useTheme();
-  const router = useRouter();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((reducers) => reducers.authReducer);
 
@@ -47,7 +38,7 @@ export default function LoginPageView() {
       password: '',
     },
     validationSchema: LoginSchema,
-    onSubmit: (values, action) => {
+    onSubmit: (values) => {
       localStorage.setItem('loginID', values.password);
       localStorage.setItem('email', values.email);
       dispatch({
@@ -71,263 +62,308 @@ export default function LoginPageView() {
   return (
     <Box
       sx={{
-        width: '100%',
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        backgroundColor: '#011627',
-        overflow: 'auto',
-        backgroundImage: 'url("../../../assets/background/Background.png")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        '&::before': {
-          content: '""',
-          position: 'fixed',
-          width: '100vw',
-          height: '100vh',
-          backgroundImage: 'url("../../../assets/background/Background_black.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed',
-          pointerEvents: 'none',
-        },
+        fontFamily: 'inherit',
       }}
     >
-      {/* Header with Logo and Language Selector */}
+      {/* Left Panel - Hero (matches nav/sidebar palette) */}
       <Box
         sx={{
-          display: 'flex',
+          flex: { xs: 0, lg: 1 },
+          display: { xs: 'none', lg: 'flex' },
+          flexDirection: 'column',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          p: { xs: 2, sm: 3, md: 4 },
-          width: '100%',
+          p: 8,
+          background: 'linear-gradient(180deg, #0f172a 0%, #0c1222 100%)',
+          borderRight: '1px solid rgba(148, 163, 184, 0.08)',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Capline Logo */}
-        <Box onClick={() => router.push('/')}>
-          <img
-            src="../../../assets/logo/capline-logo.png"
-            alt="capline logo"
-              style={{
-              width: isMobile ? '179px' : '179px',
-              marginLeft: isMobile ? '0px' : '-5px',
-              marginTop: '-16px',height:'45px',position:'relative'
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box
+            sx={{
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 6,
+              boxShadow: '0 8px 32px rgba(56, 189, 248, 0.35)',
             }}
-          />
+          >
+            <Typography sx={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>S</Typography>
+          </Box>
+
+          <Typography
+            sx={{
+              fontSize: 56,
+              fontWeight: 800,
+              color: '#f1f5f9',
+              lineHeight: 1.1,
+              mb: 3,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            Welcome
+            <br />
+            back
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 18,
+              color: 'rgba(148, 163, 184, 0.95)',
+              maxWidth: 420,
+              lineHeight: 1.6,
+              fontWeight: 400,
+            }}
+          >
+            Your revenue command center. Track pipeline health, forecast with confidence, and close
+            deals faster.
+          </Typography>
+        </Box>
+
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 2,
+                background: 'rgba(56, 189, 248, 0.08)',
+                border: '1px solid rgba(56, 189, 248, 0.15)',
+              }}
+            >
+              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    bgcolor: '#22c55e',
+                    boxShadow: '0 0 0 6px rgba(34, 197, 94, 0.2)',
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  Live activity
+                </Typography>
+              </Stack>
+              <Typography sx={{ fontSize: 14, color: 'rgba(226, 232, 240, 0.9)', fontWeight: 500 }}>
+                127 active deals · $2.4M pipeline this week
+              </Typography>
+            </Box>
+          </Stack>
         </Box>
       </Box>
 
-      {/* Main Content - Login Card */}
-      <Container
-        maxWidth="sm"
+      {/* Right Panel - Login Form */}
+      <Box
         sx={{
           flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          py: { xs: 2, sm: 3, md: 4 },
-          mt: { xs: -2, sm: -4, md: -6 },
-          px: { xs: 2, sm: 3 },
+          p: { xs: 3, sm: 6, md: 8 },
+          bgcolor: 'background.default',
+          position: 'relative',
         }}
       >
-        <Card
-          sx={{
-            width: '100%',
-            borderRadius: 1,
-            p: { xs: 2, sm: 3 },
-            boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            maxWidth: { xs: '100%', sm: '450px', md: '500px' },
-            minHeight: { xs: '600px', sm: '730px' },
-            mx: 'auto',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Capline Icon */}
-          <Box  onClick={() => router.push('/')}
+        <Box sx={{ width: '100%', maxWidth: 440 }}>
+          {/* Mobile logo */}
+          <Box
             sx={{
-              mb: 2,
-              mt: { xs: 4, sm: 8 },
+              display: { xs: 'flex', lg: 'none' },
+              width: 48,
+              height: 48,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #38bdf8, #0ea5e9)',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 4,
+              boxShadow: '0 4px 16px rgba(14, 165, 233, 0.3)',
             }}
           >
-            <img
-              src="../../../assets/logo/cap.png"
-              alt="capline logo"
-              style={{ width: isMobile ? '59px' : '59px' }}
-            />
+            <Typography sx={{ fontSize: 24, fontWeight: 800, color: '#fff' }}>S</Typography>
           </Box>
 
-          {/* Welcome Text */}
-          <Typography
-            sx={{
-              fontWeight: 700,
-              color: 'black',
-              textAlign: 'center',
-              mb: 0.5,
-              mt: 2,
-              fontSize: '18px',
-            }}
-          >
-            Welcome To Capline’s RCM360° Tool!{' '}
-          </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{
-              color: '#292929',
-              textAlign: 'center',
-              mb: { xs: 3, sm: 5 },
-              fontSize: '16px',
-              fontWeight: 1,
-              px: 2,
-            }}
-          >
-            Enter the <b color="black">Credentials</b> to access your account
-          </Typography>
-
-          {/* Login Form */}
-          <FormikProvider value={formik}>
-            <Form
-              autoComplete="off"
-              noValidate
-              onSubmit={handleSubmit}
-              style={{
-                width: '100%',
-                maxWidth: '380px',
-                padding: '0 16px',
+          <Box sx={{ mb: 5 }}>
+            <Typography
+              sx={{
+                fontSize: { xs: 28, sm: 34 },
+                fontWeight: 800,
+                color: 'text.primary',
+                mb: 1.5,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
               }}
             >
-              <Stack spacing={2}>
-                {/* Email Field */}
+              Sign in
+            </Typography>
+            <Typography sx={{ fontSize: 15, color: 'text.secondary', lineHeight: 1.6 }}>
+              Access your sales dashboard and team insights
+            </Typography>
+          </Box>
+
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Stack spacing={2.5}>
                 <TextField
                   fullWidth
                   name="email"
-                  label="Email ID"
-                  size="small"
+                  placeholder="Work email"
                   {...getFieldProps('email')}
                   error={Boolean(touched.email && errors.email)}
                   helperText={touched.email && errors.email}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: 'background.paper',
+                      borderRadius: 2,
+                      '& fieldset': { borderColor: 'divider' },
+                      '&:hover fieldset': { borderColor: 'primary.main' },
+                      '&.Mui-focused fieldset': { borderColor: 'primary.main', borderWidth: 2 },
+                    },
+                  }}
                 />
 
-                {/* Password Field */}
-                <TextField
+                <Box>
+                  <TextField
+                    fullWidth
+                    name="password"
+                    placeholder="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    {...getFieldProps('password')}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            sx={{ color: 'text.secondary' }}
+                          >
+                            <Iconify
+                              icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}
+                              sx={{ width: 22, height: 22 }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        '& fieldset': { borderColor: 'divider' },
+                        '&:hover fieldset': { borderColor: 'primary.main' },
+                        '&.Mui-focused fieldset': { borderColor: 'primary.main', borderWidth: 2 },
+                      },
+                    }}
+                  />
+                  <Box sx={{ textAlign: 'right', mt: 1 }}>
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontSize: 14,
+                        color: 'primary.main',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      Forgot password?
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <LoadingButton
                   fullWidth
-                  name="password"
-                  label="Password"
-                  size="small"
-                  type={showPassword ? 'text' : 'password'}
-                  {...getFieldProps('password')}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          size="small"
-                        >
-                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  loading={loading}
+                  sx={{
+                    mt: 0.5,
+                    height: 48,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontSize: 15,
+                    fontWeight: 600,
+                    boxShadow: (t) => t.customShadows?.primary || '0 4px 14px rgba(14, 165, 233, 0.35)',
                   }}
-                  error={Boolean(touched.password && errors.password)}
-                  helperText={touched.password && errors.password}
-                />
+                >
+                  Sign in
+                </LoadingButton>
               </Stack>
-              {/* Login Button */}
-              <LoadingButton
-                fullWidth
-                size="medium"
-                type="submit"
-                variant="contained"
-                loading={loading}
-                sx={{
-                  backgroundColor: '#2C4E6C',
-                  mt: 3,
-                  mb: 2,
-                  '&:hover': {
-                    backgroundColor: '#1E3A52',
-                  },
-                  height: '42px',
-                }}
-              >
-                Login
-              </LoadingButton>
             </Form>
           </FormikProvider>
 
-          {/* Divider with "Or" text */}
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: '380px',
-              display: 'flex',
-              alignItems: 'center',
-              my: 2,
-              px: 2, // Add horizontal padding
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} />
-            <Typography variant="caption" sx={{ px: 2, color: 'text.secondary' }}>
-              Or
+          <Box sx={{ display: 'flex', alignItems: 'center', my: 3, gap: 2 }}>
+            <Divider sx={{ flex: 1 }} />
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+              OR
             </Typography>
-            <Divider sx={{ flexGrow: 1 }} />
+            <Divider sx={{ flex: 1 }} />
           </Box>
 
-          {/* Google Login Button */}
           <LoadingButton
             fullWidth
-            size="medium"
+            size="large"
             variant="outlined"
             onClick={handleGoogleLogin}
-            startIcon={<Iconify sx={{ width: 28, height: 28 }} icon="flat-color-icons:google" />}
+            startIcon={<Iconify icon="flat-color-icons:google" sx={{ width: 22, height: 22 }} />}
             sx={{
-              color: 'text.primary',
+              height: 48,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: 15,
+              fontWeight: 600,
               borderColor: 'divider',
-              maxWidth: '350px',
-              height: '42px',
-              mt: 2,
-            }}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: { xs: 1, sm: 2 },
-              mt: 3,
-              width: '100%',
-              maxWidth: '310px',
-              px: 2,
-              flexWrap: 'wrap',
+              '&:hover': { borderColor: 'grey.400', bgcolor: 'action.hover' },
             }}
           >
-            <img src="../../../assets/background/brandicon.png" alt="logo " />
+            Continue with Google
+          </LoadingButton>
+
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Typography component="span" sx={{ color: 'text.secondary', fontSize: 15 }}>
+              Don&apos;t have an account?{' '}
+            </Typography>
+            <Typography
+              component={RouterLink}
+              href="/signup"
+              sx={{
+                color: 'primary.main',
+                fontSize: 15,
+                fontWeight: 600,
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              Create workspace
+            </Typography>
           </Box>
 
-          {/* Copyright Text */}
           <Typography
             variant="caption"
-            sx={{
-              color: 'text.secondary',
-              textAlign: 'center',
-              mt: 2,
-              mb: 6,
-              fontSize: '0.7rem',
-              px: 2,
-            }}
+            sx={{ color: 'text.secondary', textAlign: 'center', mt: 3, display: 'block', lineHeight: 1.6 }}
           >
-            Copyright 2024-2025 Capline Healthcare Management
-            <br />
-            All rights reserved.
+            By continuing, you agree to our Terms of Service and Privacy Policy.
           </Typography>
-        </Card>
-      </Container>
+        </Box>
+      </Box>
     </Box>
   );
 }

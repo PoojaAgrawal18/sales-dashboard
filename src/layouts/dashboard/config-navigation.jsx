@@ -1,44 +1,30 @@
-import SvgColor from 'src/components/svg-color';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import HandshakeRoundedIcon from '@mui/icons-material/HandshakeRounded';
+import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 
 // ----------------------------------------------------------------------
-
-const icon = (name) => (
-  <SvgColor src={`/assets/icon/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-);
 
 const navConfig = [
   {
     title: 'Dashboard',
     path: '/dashboard',
-    icon: icon('Component'),
+    icon: <DashboardRoundedIcon sx={{ fontSize: 22 }} />,
   },
   {
-    title: 'Collection Ratio',
-    path: '/collection',
-    icon: icon('User'),
+    title: 'Deals',
+    path: '/dashboard',
+    icon: <HandshakeRoundedIcon sx={{ fontSize: 22 }} />,
   },
   {
-    title: 'Month on month AR Pendency',
-    path: '/ar',
-    icon: icon('User'),
-    multiLine: true,
+    title: 'Pipeline',
+    path: '/dashboard',
+    icon: <AccountTreeRoundedIcon sx={{ fontSize: 22 }} />,
   },
   {
-    title: 'Monthly Collection/Production/AR/Adjustment/BTP',
-    path: '/monthly-collection',
-    icon: icon('User'),
-    multiLine: true,
-
-  },
-  {
-    title: 'First Pass Ratio Report',
-    path: '/first-pass',
-    icon: icon('User'),
-  },
-  {
-    title: 'Info Required Dashboard',
-    path: '/info-required',
-    icon: icon('User'),
+    title: 'Reports',
+    path: '/dashboard',
+    icon: <AssessmentRoundedIcon sx={{ fontSize: 22 }} />,
   },
 ];
 

@@ -13,6 +13,10 @@ export function* doApiCall(service, payload, ACTION_SET_STATE) {
     if (response.status === 204) {
       return { success: true };
     }
+    // For 2xx with body, return success + data so sagas can use response.success
+    if (response.status >= 200 && response.status < 300) {
+      return { success: true, data: response.data };
+    }
     return response.data;
   } catch (e) {
     yield showLoading(ACTION_SET_STATE, false);
