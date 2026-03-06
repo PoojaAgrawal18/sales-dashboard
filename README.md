@@ -1,4 +1,3 @@
-## Capline Services Template Dashboard
 
 ![preview](public/assets/preview.jpg)
 

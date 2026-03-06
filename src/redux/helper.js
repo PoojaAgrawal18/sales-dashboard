@@ -8,8 +8,8 @@ export function* doApiCall(service, payload, ACTION_SET_STATE) {
   yield showLoading(ACTION_SET_STATE, true);
   yield put({ type: ACTION_SET_STATE, payload: { formError: {} } });
   try {
-    yield showLoading(ACTION_SET_STATE, false);
     const response = yield call(service, payload);
+    yield showLoading(ACTION_SET_STATE, false);
     if (response.status === 204) {
       return { success: true };
     }

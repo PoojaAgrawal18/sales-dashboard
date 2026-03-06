@@ -1,17 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 
-import SignUpView from 'src/sections/signup-page/signup-view';
+import PipelineView from 'src/sections/dashboard/pipeline-view';
+
 
 // ----------------------------------------------------------------------
 
-export default function SignUpPage() {
+export default function PipelinePage() {
   return (
     <>
       <Helmet>
-        <title>Sign up | Sales Dashboard</title>
+        <title>Pipeline | Sales Dashboard</title>
       </Helmet>
 
-      <SignUpView />
+      <PipelineView />
     </>
   );
 }

@@ -7,4 +7,6 @@ export class AuthAPIService {
   }
 
   login = async ({ body }) => this.client.post(AUTH_API_ROUTES.LOGIN, body);
+
+  signup = async ({ body }) => this.client.post(AUTH_API_ROUTES.SIGNUP, body);
 }

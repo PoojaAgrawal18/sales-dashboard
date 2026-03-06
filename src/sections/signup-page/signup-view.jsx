@@ -31,10 +31,11 @@ export default function SignUpView() {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
-  const { loading } = useSelector((reducers) => reducers.authReducer);
+  const { loading } = useSelector((reducers) => reducers.authReducer ?? {});
+  const isLoading = Boolean(loading);
 
   const SignupSchema = Yup.object().shape({
-    fullName: Yup.string().required('Full name is required'),
+    name: Yup.string().required('Full name is required'),
     username: Yup.string().required('Username is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
@@ -46,7 +47,7 @@ export default function SignUpView() {
 
   const formik = useFormik({
     initialValues: {
-      fullName: '',
+      name: '',
       username: '',
       email: '',
       phoneNumber: '',
@@ -55,10 +56,16 @@ export default function SignUpView() {
     },
     validationSchema: SignupSchema,
     onSubmit: (values) => {
+      const trimmed = Object.fromEntries(
+        Object.entries(values).map(([k, v]) => [
+          k,
+          typeof v === 'string' ? v.trim() : v,
+        ])
+      );
       dispatch({
         type: AUTH_ACTIONS.SIGNUP,
         payload: {
-          body: values,
+          body: trimmed,
         },
       });
     },
@@ -210,11 +217,11 @@ export default function SignUpView() {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      name="fullName"
+                      name="name"
                       placeholder="Full name"
-                      {...getFieldProps('fullName')}
-                      error={Boolean(touched.fullName && errors.fullName)}
-                      helperText={touched.fullName && errors.fullName}
+                      {...getFieldProps('name')}
+                      error={Boolean(touched.name && errors.name)}
+                      helperText={touched.name && errors.name}
                       sx={inputSx}
                     />
                   </Grid>
@@ -255,7 +262,7 @@ export default function SignUpView() {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={Boolean(touched.state && errors.state)} sx={inputSx}>
-                      <Select displayEmpty {...getFieldProps('state')}>
+                      <Select displayEmpty name="state" {...getFieldProps('state')}>
                         <MenuItem value="" disabled><em>State</em></MenuItem>
                         <MenuItem value="AL">Alabama</MenuItem>
                         <MenuItem value="AK">Alaska</MenuItem>
@@ -295,7 +302,7 @@ export default function SignUpView() {
                   size="large"
                   type="submit"
                   variant="contained"
-                  loading={loading}
+                  loading={isLoading}
                   sx={{
                     mt: 0.5,
                     height: 48,

@@ -13,17 +13,17 @@ const navConfig = [
   },
   {
     title: 'Deals',
-    path: '/dashboard',
+    path: '/dashboard/deals',
     icon: <HandshakeRoundedIcon sx={{ fontSize: 22 }} />,
   },
   {
     title: 'Pipeline',
-    path: '/dashboard',
+    path: '/dashboard/pipeline',
     icon: <AccountTreeRoundedIcon sx={{ fontSize: 22 }} />,
   },
   {
     title: 'Reports',
-    path: '/dashboard',
+    path: '/dashboard/reports',
     icon: <AssessmentRoundedIcon sx={{ fontSize: 22 }} />,
   },
 ];

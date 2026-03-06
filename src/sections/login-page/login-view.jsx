@@ -27,6 +27,9 @@ export default function LoginPageView() {
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((reducers) => reducers.authReducer);
 
+  const handlePath = () => {
+    window.location.href = '/signup';
+  }
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -39,14 +42,16 @@ export default function LoginPageView() {
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      localStorage.setItem('loginID', values.password);
-      localStorage.setItem('email', values.email);
+      const email = typeof values.email === 'string' ? values.email.trim() : values.email;
+      const password = typeof values.password === 'string' ? values.password.trim() : values.password;
+      localStorage.setItem('loginID', password);
+      localStorage.setItem('email', email);
       dispatch({
         type: AUTH_ACTIONS.LOGIN,
         payload: {
           body: {
-            password: values.password,
-            email: values.email,
+            password,
+            email,
           },
         },
       });
@@ -274,6 +279,7 @@ export default function LoginPageView() {
                   <Box sx={{ textAlign: 'right', mt: 1 }}>
                     <Typography
                       component="span"
+                      onClick={handlePath}
                       sx={{
                         fontSize: 14,
                         color: 'primary.main',
