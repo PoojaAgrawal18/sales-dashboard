@@ -46,7 +46,7 @@ root.render(
     <ToastContainer />
     <HelmetProvider>
       <Router history={history}>
-        <Suspense fallback={SuspenseLoader()}>
+        <Suspense fallback={<SuspenseLoader />}>
           <App />
         </Suspense>
       </Router>

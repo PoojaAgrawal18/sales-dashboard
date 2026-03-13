@@ -21,9 +21,20 @@ export function* LOGIN({ payload }) {
     const refreshToken =
       data.tokens?.refreshToken ?? data.refreshToken ?? data.token ?? null;
 
-    const loginEmail = (payload?.body?.email && typeof payload.body.email === 'string')
-      ? payload.body.email.trim()
-      : (data?.user?.email ?? data?.email ?? null);
+    const loginEmail =
+      payload?.body?.email && typeof payload.body.email === 'string'
+        ? payload.body.email.trim()
+        : data?.user?.email ?? data?.email ?? null;
+
+    const userDetails = {
+      ...(data?.userDetails || data?.user || {}),
+      clientEmail:
+        loginEmail ||
+        data?.userDetails?.clientEmail ||
+        data?.user?.email ||
+        data?.email,
+      clientName: data?.userDetails?.clientName ?? data?.user?.name ?? data?.name,
+    };
 
     yield put({
       type: AUTH_ACTIONS.SET_STATE,
@@ -31,17 +42,14 @@ export function* LOGIN({ payload }) {
         ...data,
         tokens: data.tokens ?? { accessToken, refreshToken },
         isAuthenticated: true,
-        userDetails: {
-          ...(data?.userDetails || data?.user || {}),
-          clientEmail: loginEmail || data?.userDetails?.clientEmail || data?.user?.email || data?.email,
-          clientName: data?.userDetails?.clientName ?? data?.user?.name ?? data?.name,
-        },
+        userDetails,
       },
     });
 
     if (accessToken) store.set('accessToken', accessToken);
     if (refreshToken) store.set('refreshToken', refreshToken);
     store.set('isAuthenticated', true);
+    store.set('userDetails', userDetails);
 
     history.push('/dashboard');
 
@@ -131,7 +139,6 @@ export function* SIGNUP({ payload }) {
   }
 }
 
-
 export function* LOGOUT() {
   store.clearAll();
   localStorage.removeItem('token');
@@ -163,10 +170,32 @@ export function* LOGOUT() {
   history.push('/');
 }
 
+export function* CURRENT_USER() {
+  const isAuthenticated = store.get('isAuthenticated');
+  const accessToken = store.get('accessToken');
+  const refreshToken = store.get('refreshToken');
+  const persistedUserDetails = store.get('userDetails') || {};
+
+  if (isAuthenticated && accessToken) {
+    yield put({
+      type: AUTH_ACTIONS.SET_STATE,
+      payload: {
+        tokens: {
+          accessToken,
+          refreshToken: refreshToken || null,
+        },
+        userDetails: persistedUserDetails,
+        isAuthenticated: true,
+      },
+    });
+  }
+}
+
 export function* authSaga() {
   yield all([
     takeEvery(AUTH_ACTIONS.LOGIN, LOGIN),
     takeEvery(AUTH_ACTIONS.SIGNUP, SIGNUP),
     takeEvery(AUTH_ACTIONS.LOGOUT, LOGOUT),
+     takeEvery(AUTH_ACTIONS.CURRENT_USER, CURRENT_USER),
   ]);
 }

@@ -14,7 +14,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const logo = (
     <Box
       component="img"
-      src="../../../favicon/android-chrome-192x192.png"
+      src="/favicon/logo.svg"
       sx={{ width: 50, height: 50, cursor: 'pointer', ...sx }}
     />
   );
